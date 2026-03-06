@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "summary": {
+    "total_trends": 5,
+    "error_count": 0
+  },
+  "top_trends": [
+    {
+      "topic": "拍立得照片收纳攻略 复古相册diy",
+      "summary": "超火的拍立得相册做法分享~需要的材料工具都在这里啦",
+      "source_urls": [
+        "https://www.xiaohongshu.com/explore/xxx1"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "富士相机 instax mini 12 薄荷绿也太好看了",
+      "summary": "新品薄荷绿配色太绝了 夏天必备 搭配透明壳绝绝子",
+      "source_urls": [
+        "https://www.xiaohongshu.com/explore/xxx2"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "奶油风照片墙设计 简约ins风",
+      "summary": "奶油风照片墙yyds 分享几款百搭的相框设计",
+      "source_urls": [
+        "https://www.xiaohongshu.com/explore/xxx3"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "多巴胺配色相机包 彩色糖果色",
+      "summary": "多巴胺风相机包合集 每一个颜色都超好看",
+      "source_urls": [
+        "https://www.xiaohongshu.com/explore/xxx4"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "美拉德风格相册设计 棕色系",
+      "summary": "今年超火的美拉德风格 相册本子也要跟上",
+      "source_urls": [
+        "https://www.xiaohongshu.com/explore/xxx5"
+      ],
+      "heat_level": "medium"
+    }
+  ],
+  "design_elements": {
+    "colors": [
+      "绿",
+      "棕",
+      "色"
+    ],
+    "materials": [],
+    "structures": [
+      "mini"
+    ]
+  },
+  "risk_warnings": [],
+  "next_week_suggestions": [
+    "关注配色趋势变化，及时调整产品颜色",
+    "监测竞品设计动态，避免同质化",
+    "结合热点元素进行新品设计"
+  ],
+  "errors": [],
+  "timestamp": "2026-03-06T17:05:07.414186"
+}

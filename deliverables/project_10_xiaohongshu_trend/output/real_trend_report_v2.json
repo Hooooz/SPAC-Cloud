@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "summary": {
+    "total_trends": 7,
+    "error_count": 0
+  },
+  "top_trends": [
+    {
+      "topic": "汉印拍立得亮相CP+2026，超高颜值轻松圈粉海外观众",
+      "summary": "在日本CP+2026影像展上，国产品牌汉印携数款拍立得产品亮相，以精美设计和便捷操作吸引大批摄影爱好者",
+      "source_urls": [
+        "http://m.toutiao.com/group/7611844410984399423/"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "2026年INSTAX富士立拍立得相机对比评测:PAL、多肉绿",
+      "summary": "对比评测富士INSTAX热门机型，PAL和多肉绿版本颜值超高，成为年轻人时尚单品",
+      "source_urls": [
+        "https://m.sohu.com/a/979747842_121081803/"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "佳能2026年布局 富士新款拍立得instax mini Evo Cinema",
+      "summary": "富士发布新款混合型拍立得相机instax mini Evo Cinema，支持打印和视频功能",
+      "source_urls": [
+        "http://m.toutiao.com/group/7592952356245914121/"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "2026年拍立得相机测评:POPOTO、富士Instax、佳能IVY",
+      "summary": "热门拍立得相机测评，POPOTO以云朵白成为年轻人时尚单品，富士Mini 11持续热销",
+      "source_urls": [
+        "https://m.sohu.com/a/993070586_121081803/"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "富士INSTAX mini12测评 奶油风配色受热捧",
+      "summary": "富士mini12奶油风配色持续受热捧，成为小红书爆款，搭配透明壳效果更佳",
+      "source_urls": [
+        "https://m.sohu.com/a/982592768_121081803/"
+      ],
+      "heat_level": "medium"
+    }
+  ],
+  "design_elements": {
+    "colors": [
+      "白",
+      "色",
+      "粉",
+      "绿"
+    ],
+    "materials": [],
+    "structures": [
+      "mini"
+    ]
+  },
+  "risk_warnings": [],
+  "next_week_suggestions": [
+    "关注配色趋势变化，及时调整产品颜色",
+    "监测竞品设计动态，避免同质化",
+    "结合热点元素进行新品设计"
+  ],
+  "errors": [],
+  "timestamp": "2026-03-06T17:56:17.808742"
+}

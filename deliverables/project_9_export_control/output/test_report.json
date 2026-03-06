@@ -1,0 +1,26 @@
+{
+  "status": "error_only",
+  "summary": {
+    "total_alerts": 0,
+    "p0_count": 0,
+    "p1_count": 0,
+    "error_count": 2
+  },
+  "alerts": [],
+  "errors": [
+    {
+      "source": "US_BIS",
+      "url": "https://www.bis.gov/",
+      "error": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)",
+      "timestamp": "2026-03-06T17:01:51.108342"
+    },
+    {
+      "source": "US_BIS_EAR",
+      "url": "https://www.bis.gov/regulations/ear",
+      "error": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)",
+      "timestamp": "2026-03-06T17:01:51.646492"
+    }
+  ],
+  "timestamp": "2026-03-06T17:01:59.996032",
+  "warning": "部分数据源抓取失败，请检查错误详情"
+}

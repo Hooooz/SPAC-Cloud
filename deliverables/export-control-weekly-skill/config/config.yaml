@@ -1,0 +1,53 @@
+source_urls:
+  US_BIS: "https://www.bis.gov/"
+  US_BIS_EAR: "https://www.bis.gov/regulations/ear"
+  US_TREASURY: "https://home.treasury.gov/news/press-releases"
+  OFAC: "https://ofac.treasury.gov/"
+  CSL: "https://www.trade.gov/data-visualization/csl-search"
+  SG_CUSTOMS: "https://www.customs.gov.sg/news/"
+  CN_MOFCOM: "https://www.mofcom.gov.cn/fzlm/mrgx/index.html"
+  CN_CUSTOMS: "http://www.customs.gov.cn/customs/302249/ztzl/ztgz/ind"
+
+category_keywords:
+  - "拍立得"
+  - "相机包"
+  - "相框"
+  - "polaroid"
+  - "instant camera"
+  - "photo frame"
+  - "胶片相机"
+  - "数码相机"
+
+product_keywords:
+  - "相机"
+  - "胶片"
+  - "相册"
+  - "照片打印机"
+  - "数码相机"
+
+topic_keywords:
+  - "出口管制"
+  - "export control"
+  - "制裁"
+  - "sanction"
+  - "实体清单"
+  - "entity list"
+  - "许可证"
+  - "license"
+  - "最终用户"
+  - "end user"
+  - "最终用途"
+  - "end use"
+  - "EAR"
+  - "BIS"
+  - "OFAC"
+  - "embargo"
+  - "禁运"
+  - "贸易战"
+  - "关税"
+
+days_lookback: 30
+
+output:
+  encoding: "utf-8"
+  format: "json"
