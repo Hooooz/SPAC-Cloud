@@ -98,6 +98,37 @@ class DesignInspirationMonitor:
         
         return summary
 
+    def _extract_source_name(self, url: str) -> str:
+        if not url:
+            return "未知来源"
+        if "sohu.com" in url or "m.sohu.com" in url:
+            return "搜狐"
+        if "toutiao.com" in url:
+            return "今日头条"
+        if "xiaohongshu.com" in url:
+            return "小红书"
+        if "weibo.com" in url:
+            return "微博"
+        if "zhihu.com" in url:
+            return "知乎"
+        if "bilibili.com" in url:
+            return "B站"
+        if "jd.com" in url:
+            return "京东"
+        if "taobao.com" in url or "tmall.com" in url:
+            return "淘宝"
+        if "1688.com" in url:
+            return "1688"
+        if "douyin.com" in url:
+            return "抖音"
+        if "example.com" in url:
+            return "示例"
+        import re
+        match = re.search(r'https?://(?:www\.)?([^/]+)', url)
+        if match:
+            return match.group(1).split('.')[0]
+        return "链接"
+
     def parse_search_results(self, search_results: list) -> list[dict]:
         parsed = []
         for item in search_results:
@@ -258,8 +289,8 @@ class DesignInspirationMonitor:
         
         for i, t in enumerate(self.trends[:5], 1):
             source = t.source_urls[0] if t.source_urls else ""
-            source_name = "链接"
-            lines.append(f"| {i} | {t.category} | {t.topic[:30]} | [{source_name}]({source[:50]}) |")
+            source_name = self._extract_source_name(source)
+            lines.append(f"| {i} | {t.category} | {t.topic[:30]} | [{source_name}]({source[:60]}) |")
         
         lines.append("")
         lines.append("---")

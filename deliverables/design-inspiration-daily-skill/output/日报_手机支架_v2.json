@@ -1,0 +1,83 @@
+{
+  "status": "success",
+  "report_type": "daily",
+  "summary": {
+    "total_trends": 8,
+    "categories": {
+      "产品测评": 5,
+      "设计趋势": 1,
+      "新品速递": 1,
+      "综合": 1
+    },
+    "error_count": 0
+  },
+  "daily_summary": "今日共收录8条热点，涵盖产品测评5条, 设计趋势1条, 新品速递1条, 综合1条。热点话题集中在：2026年手机支架对比测评:加长2.1米的便携金属支架与其他品牌的性能一览、2026年手机支架测评:加长2.1米金属款对比其他热门品牌。配色方面，米色系热度较高。",
+  "top_trends": [
+    {
+      "topic": "2026年手机支架对比测评:加长2.1米的便携金属支架与其他品牌的性能一览",
+      "summary": "Manfrotto Compact Action Tripod Joby GorillaPod 3K Neewer 2.1米三脚架 UBeesize 51英寸三脚架对比测评",
+      "category": "产品测评",
+      "source_urls": [
+        "https://www.sohu.com/a/975456423_121081803"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "2026年手机支架测评:加长2.1米金属款对比其他热门品牌",
+      "summary": "加长2.1米金属款手机支架套装Manfrotto Pixi Mini三脚架Neewer可调节手机支架便携式三脚架JOBY GorillaPod 3K测评",
+      "category": "产品测评",
+      "source_urls": [
+        "https://m.sohu.com/a/981661747_121081803/"
+      ],
+      "heat_level": "high"
+    },
+    {
+      "topic": "2026年手机支架测评:加长2.1米支架VS其他热门品牌",
+      "summary": "安克（Anker）三脚架、曼富图（Manfrotto）立式支架、JOBY GorillaPod和小米手机支架对比",
+      "category": "产品测评",
+      "source_urls": [
+        "https://m.sohu.com/a/975455788_121081803/"
+      ],
+      "heat_level": "high"
+    },
+    {
+      "topic": "2026年手机支架对比评测:加长2.1米金属款与其他品牌的性能一览",
+      "summary": "加长2.1米金属款手机支架套装、佳能三脚架、美科便携式手机支架、Joby、GorillaPod、Neewer可调节手机支架对比评测",
+      "category": "产品测评",
+      "source_urls": [
+        "https://m.sohu.com/a/975456223_121081803/"
+      ],
+      "heat_level": "medium"
+    },
+    {
+      "topic": "2026年手机支架对比测评:加长2.1米金属款与其他主流品牌的性能一览",
+      "summary": "加长2.1米手机支架套装（支架+云台+手机夹）Neewer 70英寸可调节三脚架Manfrotto PIXI迷你三脚架对比",
+      "category": "产品测评",
+      "source_urls": [
+        "https://m.sohu.com/a/975456259_121081803/"
+      ],
+      "heat_level": "medium"
+    }
+  ],
+  "design_elements": {
+    "colors": [
+      "米"
+    ],
+    "materials": [
+      "金属"
+    ],
+    "structures": [
+      "折叠",
+      "轻便",
+      "便携"
+    ]
+  },
+  "risk_warnings": [],
+  "next_week_suggestions": [
+    "关注配色趋势变化，及时调整产品颜色",
+    "监测竞品设计动态，避免同质化",
+    "结合热点元素进行新品设计"
+  ],
+  "errors": [],
+  "timestamp": "2026-03-06T23:14:45.548079"
+}
