@@ -1,0 +1,26 @@
+{
+  "project9_export_control_alert": {
+    "name": "信息洞察-9 出口管制预警（工作日2次）",
+    "schedule": {"kind": "cron", "expr": "30 9,16 * * 1-5", "tz": "Asia/Shanghai"},
+    "sessionTarget": "isolated",
+    "payload": {
+      "kind": "agentTurn",
+      "timeoutSeconds": 300,
+      "message": "你在飞书群里投递“出口管制/合规变化提醒”日报（近7天范围）。要求：\n1) 覆盖区域：中/美/新加坡；优先：出口管制。\n2) 只用权威源（宁少但准）。\n3) 用 web_fetch 逐一抓取以下入口页，提取“近7天内”与“出口管制/制裁/实体清单/许可证/最终用户最终用途”相关的更新；同时用关键词过滤：拍立得周边/相机包/相框 + PU/PVC/纺织/尼龙/磁铁/涂层 等（命中其一即可）。\n4) 若无命中：正常情况，静默（不发群消息）。\n5) 若抓取失败/403/404/空结构：必须发“抓取失败告警”，包含失败源URL与原因。\n6) 若有命中：按模板输出：标题【出口管制预警 P0/P1】【国家/区域】【品类】；内容含：结论一句话、影响点2-3条、建议动作1-3条、来源链接（只放URL）。\n\n权威源入口（白名单v0.2）：\n- US BIS: https://www.bis.gov/ ；https://www.bis.gov/regulations/ear\n- US Treasury Press Releases: https://home.treasury.gov/news/press-releases\n- OFAC: https://ofac.treasury.gov/\n- CSL Search: https://www.trade.gov/data-visualization/csl-search\n- SG Customs News: https://www.customs.gov.sg/news/\n- CN MOFCOM（每日更新摘要，按近7天收集）: https://www.mofcom.gov.cn/fzlm/mrgx/index.html\n\n注意：只输出与出口管制/制裁/清单/许可证高度相关的变更，避免泛资讯。"
+    },
+    "delivery": {"mode": "announce"},
+    "enabled": true
+  },
+  "project10_xhs_weekly_trends": {
+    "name": "信息洞察-10 小红书趋势简报（每周一）",
+    "schedule": {"kind": "cron", "expr": "0 10 * * 1", "tz": "Asia/Shanghai"},
+    "sessionTarget": "isolated",
+    "payload": {
+      "kind": "agentTurn",
+      "timeoutSeconds": 300,
+      "message": "你在飞书群里投递《拍立得周边趋势简报》（每周一）。要求：\n1) 渠道：小红书（参考级，不作为唯一决策依据）。\n2) 关键词池：拍立得、拍立得相机包、拍立得相框、拍立得周边、收纳包、保护套；风格词：复古/ins/奶油风/Y2K/极简/通勤；需求词：防摔/防水/大容量/轻便/分层/磁吸。\n3) 输出只保留信息来源链接（URL）。\n4) 输出结构：TOP5 主题（每条：一句话趋势 + 1-3个来源链接）+ 设计元素总结（配色/材质工艺/结构功能点）+ 风险提示（同质化/侵权等）+ 下周建议动作（≤3条）。\n5) 如抓取失败/无数据：发“抓取失败告警”并说明原因；不要输出空的周报。\n\n如果环境里可用 xiaohongshu 相关能力则优先使用；否则使用公开可访问页面抓取与归纳，且必须带来源链接。"
+    },
+    "delivery": {"mode": "announce"},
+    "enabled": true
+  }
+}
