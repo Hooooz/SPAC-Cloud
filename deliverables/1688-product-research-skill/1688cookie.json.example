@@ -1,0 +1,62 @@
+[
+    {
+        "domain": ".1688.com",
+        "expirationDate": 1773302579,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "__cn_logon__",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "value": "true"
+    },
+    {
+        "domain": ".1688.com",
+        "expirationDate": 1773302579,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "__cn_logon_id__",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "value": "%E6%97%B6%E5%85%89%E7%A8%9A"
+    },
+    {
+        "domain": ".1688.com",
+        "expirationDate": 1773302576.999212,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_tb_token_",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "value": "your_token_here"
+    },
+    {
+        "domain": ".1688.com",
+        "expirationDate": 1773302576.997617,
+        "hostOnly": false,
+        "httpOnly": true,
+        "name": "cookie1",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "value": "your_cookie1_here"
+    },
+    {
+        "domain": ".1688.com",
+        "expirationDate": 1788326220,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "isg",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "value": "your_isg_here"
+    }
+]
