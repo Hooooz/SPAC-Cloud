@@ -1,6 +1,6 @@
 ---
 name: "1688-product-research"
-description: "Research 1688 products using browser with cookie login. Invoke when user wants to search and gather product information from 1688."
+description: "Research 1688 products using browser with cookie login. Supports both search by keyword and product detail research. Invoke when user wants to search and gather product information from 1688."
 ---
 
 # 1688 Product Research Skill
@@ -10,7 +10,8 @@ A skill for researching products on 1688.com using Playwright browser automation
 ## Features
 
 - Cookie-based login (no manual login required after initial setup)
-- Product search on 1688 homepage
+- **Product Search**: Search products by keyword and get top results with URLs
+- **Product Detail Research**: Extract detailed product information from detail pages
 - Extract detailed product information including:
   - Product name (used as model)
   - Color variants
@@ -38,25 +39,39 @@ Export your 1688 cookies from Chrome browser using a cookie extension (like "Edi
 
 Save the cookies as JSON format to `1688cookie.json` in the project root.
 
-### 2. Configure Product URL
-
-Edit the `product_url` variable in `src/research.py` to specify the 1688 product page you want to research.
-
-### 3. Run the Research
+### 2. Search Products by Keyword
 
 ```bash
-python -m src.research
+python -m src.search --keyword "手机支架"
 ```
 
-The script will:
+The search script will:
 1. Load cookies and login to 1688
-2. Navigate to the product detail page
-3. Extract product information
+2. Navigate to 1688 search page with properly URL-encoded keyword
+3. Extract top 20 product results
 4. Save results to CSV file
+
+### 3. Research Product Details
+
+After getting product URLs from search, research individual products:
+
+```bash
+python -m src.research --url "商品URL" --name "商品名"
+```
 
 ## Output Format
 
-The research results are saved to `output/1688_product_detail.csv` with the following columns:
+### Search Results (`output/1688_search_results.csv`)
+
+| Column | Description |
+|--------|-------------|
+| 序号 | Row number |
+| 商品标题 | Product title |
+| 价格 | Product price |
+| 图片 | Product image URL |
+| 链接 | Product URL |
+
+### Product Detail Results (`output/1688_product_detail.csv`)
 
 | Column | Description |
 |--------|-------------|
@@ -71,34 +86,38 @@ The research results are saved to `output/1688_product_detail.csv` with the foll
 
 Each tiered price creates a separate row in the output.
 
-## Cookie Setup
+## Command Line Options
 
-1. Install a cookie extension in Chrome (e.g., "EditThisCookie")
-2. Visit 1688.com and login
-3. Export cookies for 1688.com domain
-4. Save as JSON format to `1688cookie.json`
+### Search Script (`src/search.py`)
 
-## Project Structure
+| Option | Description |
+|--------|-------------|
+| `--keyword` | Search keyword (required) |
+| `--cookie` | Cookie file path (default: 1688cookie.json) |
+| `--headless` | Run in headless mode |
+| `--max` | Maximum number of results (default: 20) |
 
-```
-1688-product-research-skill/
-├── SKILL.md                 # This file
-├── README.md                # English documentation
-├── requirements.txt         # Python dependencies
-├── 1688cookie.json         # Cookie file (you need to create this)
-├── src/
-│   └── research.py         # Main research script
-└── output/
-    └── 1688_product_detail.csv  # Research results
-```
+### Research Script (`src/research.py`)
+
+| Option | Description |
+|--------|-------------|
+| `--url` | 1688 product detail URL (required) |
+| `--name` | Product name for CSV output |
+| `--cookie` | Cookie file path (default: 1688cookie.json) |
+| `--headless` | Run in headless mode |
 
 ## Important Notes
 
+- **URL Encoding**: Keywords are automatically URL-encoded to prevent garbled search queries
 - Cookie expiration: Cookies will expire, you may need to refresh them periodically
 - PLUS会员95折: Requires a 1688 PLUS membership account to retrieve
 - Rate limiting: Don't make too many requests in a short time to avoid being blocked
 
 ## Troubleshooting
+
+### Search Returns No Results
+- Check if cookies are valid and not expired
+- Try running without headless mode to see if verification is needed
 
 ### Login Failed
 - Refresh the cookie file with new cookies from browser
@@ -106,7 +125,3 @@ Each tiered price creates a separate row in the output.
 ### Anti-bot Verification
 - The script uses headless=False by default to allow manual verification
 - If verification is triggered, complete it manually in the browser window
-
-### Price Extraction Failed
-- Check if the product page structure has changed
-- Update the regex patterns in the script accordingly
