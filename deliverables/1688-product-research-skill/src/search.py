@@ -2,6 +2,8 @@ import json
 import csv
 import os
 import urllib.parse
+import re
+import random
 from playwright.sync_api import sync_playwright
 
 
@@ -23,68 +25,60 @@ def load_cookies(cookie_file='1688cookie.json'):
     return playwright_cookies
 
 
-def build_search_url(keyword, page_num=1):
-    """Build 1688 search URL with proper URL encoding."""
-    encoded_keyword = urllib.parse.quote(keyword)
-    search_url = f"https://s.1688.com/youyuan/index.htm?tab=search&beginPage={page_num}&pageSize=60&keywords={encoded_keyword}"
-    return search_url
+def clean_title(title):
+    """Clean product title, remove extra info."""
+    lines = title.split('\n')
+    clean_lines = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        if any(x in line for x in ['分享', '新人价', '退货包', '先采后付', '回头率', '件', '¥', '热卖', '回购', '热度', '推荐', '综合服务', '采购咨询', '品质体验']):
+            continue
+        if re.match(r'^[\d\.¥\+]+$', line):
+            continue
+        clean_lines.append(line)
+    
+    if clean_lines:
+        return clean_lines[0][:80]
+    return title[:80]
 
 
 def extract_search_results(page):
     """Extract product list from search results page."""
     results = []
 
+    # 方法1: 从页面所有链接中提取
     try:
-        offer_items = page.locator(".offer-item").all()
-        
-        for item in offer_items[:20]:
+        all_links = page.locator("a").all()
+        for link in all_links[:300]:
             try:
-                title_elem = item.locator(".title")
-                title = title_elem.inner_text().strip() if title_elem.count() > 0 else ""
+                href = link.get_attribute("href") or ""
+                text = link.inner_text().strip()
 
-                price_elem = item.locator(".price")
-                price = price_elem.inner_text().strip() if price_elem.count() > 0 else ""
-
-                link_elem = item.locator("a.title-link")
-                url = link_elem.get_attribute("href") if link_elem.count() > 0 else ""
-
-                img_elem = item.locator("img")
-                img = img_elem.get_attribute("src") if img_elem.count() > 0 else ""
-
-                if title and url:
-                    results.append({
-                        "title": title,
-                        "price": price,
-                        "url": url,
-                        "image": img
-                    })
-            except Exception as e:
-                continue
-    except Exception as e:
-        print(f"提取搜索结果时出错: {e}")
-
-    if not results:
-        try:
-            all_links = page.locator("a").all()
-            for link in all_links[:50]:
-                try:
-                    href = link.get_attribute("href") or ""
-                    text = link.inner_text().strip()
-                    
-                    if "offerId=" in href and text:
-                        img_elem = link.locator("..").locator("img").first
-                        img = img_elem.get_attribute("src") if img_elem.count() > 0 else ""
-                        
+                if "offerId=" in href and len(text) > 5:
+                    clean_text = clean_title(text)
+                    if clean_text:
                         results.append({
-                            "title": text[:100],
+                            "title": clean_text,
                             "price": "",
                             "url": href,
-                            "image": img
+                            "image": ""
                         })
-                except:
-                    continue
-        except:
-            pass
+            except:
+                continue
+
+        # 去重
+        seen = {}
+        unique_results = []
+        for r in results:
+            offer_id = re.search(r'offerId=(\d+)', r['url'])
+            if offer_id and offer_id.group(1) not in seen:
+                seen[offer_id.group(1)] = True
+                unique_results.append(r)
+        results = unique_results
+    except Exception as e:
+        print(f"方法1提取失败: {e}")
 
     return results
 
@@ -114,20 +108,27 @@ def run_search(keyword, cookie_file='1688cookie.json', headless=False, max_resul
     print(f"加载了 {len(load_cookies(cookie_file))} 个Cookie")
     print(f"搜索关键词: {keyword}")
 
+    # 使用正确的1688搜索URL
     encoded_keyword = urllib.parse.quote(keyword)
-    search_url = f"https://s.1688.com/youyuan/index.htm?tab=search&beginPage=1&pageSize=60&keywords={encoded_keyword}"
+    spm_value = f"a26{random.randint(10000000, 99999999)}.searchbox.0"
+    search_url = f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded_keyword}&spm={spm_value}"
+
     print(f"搜索URL: {search_url}")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=headless)
-        context = browser.new_context()
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
         context.add_cookies(load_cookies(cookie_file))
 
         page = context.new_page()
-        
+
         print("正在打开搜索页面...")
         page.goto(search_url)
-        page.wait_for_timeout(15000)
+        page.wait_for_timeout(20000)
+
+        print(f"页面标题: {page.title()}")
 
         print("正在提取商品列表...")
         results = extract_search_results(page)
@@ -139,12 +140,11 @@ def run_search(keyword, cookie_file='1688cookie.json', headless=False, max_resul
             print("搜索结果预览 (前10个):")
             print("="*80)
             for idx, item in enumerate(results[:10], 1):
-                print(f"{idx}. {item['title'][:50]}...")
-                print(f"   价格: {item['price']}")
+                print(f"{idx}. {item['title']}")
                 print(f"   链接: {item['url'][:80]}...")
                 print()
 
-            save_search_results(results)
+            save_search_results(results[:max_results])
         else:
             print("未找到任何商品，请尝试更换关键词或检查登录状态")
 
