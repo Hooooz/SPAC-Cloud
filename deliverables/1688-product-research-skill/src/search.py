@@ -48,7 +48,6 @@ def extract_search_results(page):
     """Extract product list from search results page."""
     results = []
 
-    # 方法1: 从页面所有链接中提取
     try:
         all_links = page.locator("a").all()
         for link in all_links[:300]:
@@ -68,7 +67,6 @@ def extract_search_results(page):
             except:
                 continue
 
-        # 去重
         seen = {}
         unique_results = []
         for r in results:
@@ -78,7 +76,7 @@ def extract_search_results(page):
                 unique_results.append(r)
         results = unique_results
     except Exception as e:
-        print(f"方法1提取失败: {e}")
+        print(f"提取失败: {e}")
 
     return results
 
@@ -108,8 +106,8 @@ def run_search(keyword, cookie_file='1688cookie.json', headless=False, max_resul
     print(f"加载了 {len(load_cookies(cookie_file))} 个Cookie")
     print(f"搜索关键词: {keyword}")
 
-    # 使用正确的1688搜索URL
-    encoded_keyword = urllib.parse.quote(keyword)
+    # 关键修复：1688需要使用GBK编码，而不是UTF-8
+    encoded_keyword = urllib.parse.quote(keyword.encode('gbk'))
     spm_value = f"a26{random.randint(10000000, 99999999)}.searchbox.0"
     search_url = f"https://s.1688.com/selloffer/offer_search.htm?keywords={encoded_keyword}&spm={spm_value}"
 
