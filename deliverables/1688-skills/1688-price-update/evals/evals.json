@@ -1,0 +1,23 @@
+{
+  "skill_name": "1688-price-update",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我更新飞书表格里所有产品的最新价格",
+      "expected_output": "Should access Feishu Bitable, read product links, visit each 1688 product page, extract current prices, and update the price column in Feishu",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "查一下这个链接的最新价格: https://detail.1688.com/offer/1018923549617.html",
+      "expected_output": "Should visit the specific 1688 product link, extract current price information including MOQ tiers, and display the price to user",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "刷新一下调研表里那些指甲刀产品的价格,看看有没有涨价",
+      "expected_output": "Should access Feishu Bitable, filter products containing '指甲刀', visit their 1688 links, extract prices, compare with previous prices, and report price changes",
+      "files": []
+    }
+  ]
+}

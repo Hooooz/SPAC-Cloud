@@ -1,0 +1,23 @@
+{
+  "skill_name": "1688-product-search",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我在1688上搜索指甲刀产品,找一些价格便宜的供应商",
+      "expected_output": "Should search for '指甲刀' on 1688, collect product information including prices, supplier details, and save results to Feishu Bitable with recommendations for cheapest options",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我需要找一些拍立得相机包的货源,价格在5-15元之间的",
+      "expected_output": "Should search for '拍立得相机包' on 1688 with price filter 5-15 yuan, collect product details, and save matching products to Feishu Bitable",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "搜索一下化妆包,看看有哪些新款,添加到调研表里",
+      "expected_output": "Should search for '化妆包' on 1688, identify new/trending products, collect detailed information, and add them to Feishu Bitable for tracking",
+      "files": []
+    }
+  ]
+}
