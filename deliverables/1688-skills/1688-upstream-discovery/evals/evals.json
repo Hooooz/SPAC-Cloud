@@ -1,0 +1,20 @@
+{
+  "skill_name": "1688-upstream-discovery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我在1688上搜索拍立得相机包背带相关配件新品，给我链接和大致价格",
+      "expected_output": "Should use keyword-based 1688 discovery workflow, extract candidate product detail links, provide rough price hints and MOQ hints, and clearly label supplier/new-product signals as hints."
+    },
+    {
+      "id": 2,
+      "prompt": "找20个拍立得背带的上游供应商，优先源头工厂，输出表格",
+      "expected_output": "Should run upstream discovery with result-size target, return deduplicated candidates with product links, supplier hints, price ranges, and output file paths for CSV/JSON/Markdown."
+    },
+    {
+      "id": 3,
+      "prompt": "我只需要1688新品搜索，不要更新已有Excel价格",
+      "expected_output": "Should choose this skill (not 1688-price-update), run keyword search flow, and return sourcing candidates instead of workbook write-back."
+    }
+  ]
+}
