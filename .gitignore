@@ -2,3 +2,17 @@
 # Secrets / cookies
 **/1688cookie.json
 **/cookies.json
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# Local outputs
+**/output/
+**/data/search_results_*.json
+!**/output/.gitkeep

@@ -5,6 +5,7 @@ import argparse
 import re
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote_plus
 
 import httpx
 
@@ -14,54 +15,108 @@ class SearchFetcher:
         self.keyword = keyword
         self.max_results = max_results
         self.results = []
+        self.project_root = Path(__file__).resolve().parent.parent
+
+    def _parse_google_results(self, html: str) -> list[dict]:
+        items = re.findall(r'<a href="/url\\?q=(https?://[^"&]+)[^"]*"[^>]*>(.*?)</a>', html)
+        if not items:
+            items = re.findall(r'<a href="(https?://[^"]+)"[^>]*><span[^>]*>([^<]+)</span>', html)
+
+        parsed = []
+        for result_url, title_html in items[:10]:
+            if any(skip in result_url for skip in ["google", "youtube", "facebook", "twitter"]):
+                continue
+            title = re.sub(r"<[^>]+>", "", title_html).strip()
+            if not title:
+                continue
+            parsed.append({
+                "title": title,
+                "url": result_url,
+                "description": f"搜索关键词: {self.keyword}",
+                "timestamp": datetime.now().strftime("%Y-%m-%d"),
+                "source_type": "web_search",
+                "source_engine": "google",
+            })
+        return parsed
+
+    def _parse_duckduckgo_results(self, html: str) -> list[dict]:
+        matches = re.findall(
+            r'<a[^>]*class="[^"]*result__a[^"]*"[^>]*href="([^"]+)"[^>]*>(.*?)</a>(.*?)(?=<a[^>]*class="[^"]*result__a|$)',
+            html,
+            re.IGNORECASE | re.DOTALL,
+        )
+        parsed = []
+        for result_url, title_html, tail_html in matches[:10]:
+            title = re.sub(r"<[^>]+>", "", title_html).strip()
+            if not title or not result_url.startswith("http"):
+                continue
+            snippet_match = re.search(
+                r'class="[^"]*result__snippet[^"]*"[^>]*>(.*?)</',
+                tail_html,
+                re.IGNORECASE | re.DOTALL,
+            )
+            snippet = ""
+            if snippet_match:
+                snippet = re.sub(r"<[^>]+>", "", snippet_match.group(1)).strip()
+            parsed.append({
+                "title": title,
+                "url": result_url,
+                "description": snippet or f"搜索关键词: {self.keyword}",
+                "timestamp": datetime.now().strftime("%Y-%m-%d"),
+                "source_type": "web_search",
+                "source_engine": "duckduckgo",
+            })
+        return parsed
+
+    def _search_google(self, query: str, headers: dict) -> list[dict]:
+        url = f"https://www.google.com/search?q={quote_plus(query)}&num={max(10, self.max_results // 2)}"
+        response = httpx.get(url, headers=headers, timeout=15.0, follow_redirects=True)
+        if response.status_code != 200:
+            return []
+        return self._parse_google_results(response.text)
+
+    def _search_duckduckgo(self, query: str, headers: dict) -> list[dict]:
+        url = "https://html.duckduckgo.com/html/"
+        response = httpx.post(url, data={"q": query}, headers=headers, timeout=15.0, follow_redirects=True)
+        if response.status_code != 200:
+            return []
+        return self._parse_duckduckgo_results(response.text)
 
     def search_web(self) -> list[dict]:
         search_queries = [
-            f"{self.keyword} 评测 推荐 2026",
-            f"{self.keyword} 测评 热门 2026",
-            f"{self.keyword} 新品 设计 趋势"
+            f"{self.keyword} 设计 趋势 2026",
+            f"{self.keyword} 案例 灵感 2026",
+            f"{self.keyword} 测评 推荐 2026",
         ]
-        
+
         headers = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
         }
-        
+
         all_results = []
-        
-        for query in search_queries[:2]:
+
+        for query in search_queries:
             try:
-                url = f"https://www.google.com/search?q={query}&num={self.max_results // 2}"
-                response = httpx.get(url, headers=headers, timeout=15.0, follow_redirects=True)
-                
-                if response.status_code == 200:
-                    html = response.text
-                    
-                    items = re.findall(
-                        r'<a href="(https?://[^"]+)"[^>]*><span[^>]*>([^<]+)</span>',
-                        html
-                    )
-                    
-                    for url, title in items[:10]:
-                        if any(skip in url for skip in ['google', 'youtube', 'facebook', 'twitter']):
-                            continue
-                        all_results.append({
-                            "title": title.strip(),
-                            "url": url,
-                            "description": f"搜索关键词: {self.keyword}",
-                            "timestamp": datetime.now().strftime("%Y-%m-%d")
-                        })
+                all_results.extend(self._search_google(query, headers))
             except Exception as e:
-                print(f"搜索 '{query}' 时出错: {e}")
-                continue
-        
+                print(f"Google 搜索 '{query}' 时出错: {e}")
+
+            try:
+                all_results.extend(self._search_duckduckgo(query, headers))
+            except Exception as e:
+                print(f"DuckDuckGo 搜索 '{query}' 时出错: {e}")
+
         unique_results = []
         seen_urls = set()
         for r in all_results:
             if r["url"] not in seen_urls:
                 seen_urls.add(r["url"])
                 unique_results.append(r)
-        
-        return unique_results[:self.max_results]
+
+        if unique_results:
+            return unique_results[:self.max_results]
+        print(f"⚠️ 未检索到“{self.keyword}”的有效实时搜索结果，本次不使用本地 mock 兜底。")
+        return []
 
     def run(self) -> list[dict]:
         print(f"🔍 正在搜索: {self.keyword}")

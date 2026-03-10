@@ -47,6 +47,8 @@ topic_keywords:
   - "关税"
 
 days_lookback: 30
+detail_level: "detailed"
+max_alerts: 12
 
 output:
   encoding: "utf-8"

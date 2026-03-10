@@ -13,7 +13,7 @@ import yaml
 
 
 def main():
-    parser = argparse.ArgumentParser(description="拍立得与周边产品设计灵感日报 - 完整流程")
+    parser = argparse.ArgumentParser(description="设计灵感日报 - 完整流程（仅适用于产品/视觉/包装等设计主题）")
     parser.add_argument("--keyword", "-k", required=True, help="搜索关键词")
     parser.add_argument("--config", "-c", default="config/config.yaml", help="配置文件路径")
     parser.add_argument("--max-results", "-n", type=int, default=20, help="最大搜索结果数")
@@ -51,7 +51,7 @@ def main():
     print("=" * 50)
     
     monitor = DesignInspirationMonitor(config=config)
-    report = monitor.run(search_results=search_results)
+    report = monitor.run(search_results=search_results, keyword=args.keyword)
 
     output_path = Path(args.out)
     output_path.parent.mkdir(parents=True, exist_ok=True)

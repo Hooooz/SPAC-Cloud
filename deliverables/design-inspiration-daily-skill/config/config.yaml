@@ -24,5 +24,7 @@ topic_keywords:
   - "折叠"
 
 max_results: 20
+top_n: 8
+detail_level: "detailed"
 
 output_format: "markdown"
