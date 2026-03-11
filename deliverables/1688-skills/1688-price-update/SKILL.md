@@ -5,7 +5,7 @@ description: Update prices in local Excel tracking sheets from existing 1688 pro
 
 # 1688 Price Update
 
-Use this skill for **existing workbooks with 1688 links already filled in**. Do not use it for finding new suppliers or new products; that belongs to `1688-product-search`.
+Use this skill for **existing workbooks with 1688 links already filled in**. Do not use it for finding new suppliers or new products; that belongs to `1688-upstream-discovery`.
 
 ## Scope
 
@@ -101,6 +101,51 @@ Do not:
 - Invent missing tiers
 - Copy a shared-link price to multiple product segments unless the page clearly exposes the same spec/price for all of them
 
+## Known Failure Modes
+
+These are not theoretical. They all caused real miswrites during previous runs and must be treated as hard safeguards.
+
+1. Do not assume a fixed 3-row product layout.
+- Real failure: shared merged link block `BN147:BN152` contained two products, and row 150 was previously dropped or split incorrectly.
+
+2. Do not assume row 1 is the header row.
+- Real failure: summary-mode once wrote new headers to row 1 instead of row 2 and broke the workbook layout.
+
+3. Do not treat the second column as a reliable color field everywhere.
+- Real failure: some rows contained `DISPIMG(...)` image formulas in column 2, and older parsing treated them as color text.
+
+4. Do not mark homepage redirects as successful price captures.
+- Real failure: pages with title like `阿里1688首页` were once recorded as `success` and produced nonsense ranges such as `¥0.02-9800.00`.
+
+5. Do not assume every product uses the same tier template.
+- Real failure: webpage tiers varied widely, such as `1-299 / 300-2999 / ≥3000`, `1-999 / 1000-19999 / ≥20000`, `1-1999 / 2000-9999 / ≥10000`, or single-tier `≥10`.
+
+6. Do not match by MOQ lower bound alone.
+- Real failure: for pages like `1-1999 / 2000-9999 / ≥10000`, Excel row `1000-10000` was once incorrectly matched to the first tier because only the lower bound was considered.
+
+7. Do not assume quantity text appears before price text on the webpage.
+- Real failure: some 1688 pages render each tier as `price` first and `quantity` second. Older logic paired the wrong price to the wrong MOQ.
+
+8. Do not force-fill a row whose MOQ is below the page minimum.
+- Real failure: a page with only `≥10` was previously allowed to leak into an Excel row with quantity `1`. Current rule must leave that row blank or unmatched.
+
+9. Do not let single-tier pages drift to the highest Excel tier.
+- Real failure: when Excel had fewer rows than the page had tiers, fallback matching once chose the last tier instead of the first applicable tier.
+
+10. Treat captcha, redirect, and missing mapping as different failure classes.
+- Real failure: older runs mixed together `无效`, `无价格`, and blank rows, which made review harder and hid true extraction problems.
+
+## Hard Safeguards
+
+Before writing any result back:
+- Verify the page is still an `offer` page, not homepage/login/captcha redirect.
+- Verify the extracted ladder count and ordering are plausible before matching.
+- Verify price-to-MOQ pairing from the page, not just price presence.
+- Verify Excel rows are matched as a ladder group, not as isolated rows when the page exposes multiple tiers.
+- Leave rows blank when the page does not expose a reliable mapping.
+- Prefer `无效` over a guessed numeric value when redirect or parsing quality is suspect.
+- Prefer blank over a guessed numeric value when MOQ cannot be matched confidently.
+
 ## Status Rules
 
 Allowed write-back statuses:
@@ -151,9 +196,12 @@ Current behavior to rely on:
 - The workbook is parsed by link merged blocks plus product segments, not by fixed 3-row chunks
 - Shared link blocks such as `BN147:BN152` are kept intact and their product segments are detected separately
 - Summary-mode invalid homepage redirects should be treated as `无效`, not as successful price captures
+- Ladder mode matches real page ladders instead of assuming one global MOQ template
+- Rows below the page minimum MOQ must remain unmatched rather than being backfilled with a guessed price
 
 Residual risk:
 - Ladder mode still cannot reliably disambiguate SKU-specific prices inside a shared-link page unless the page exposes a clear tier mapping for the target segment; review those rows after batch update
+- Search or detail pages may trigger slider captcha or anti-bot redirects, which can reduce the number of valid updates in a batch
 
 ## Execution Notes
 
